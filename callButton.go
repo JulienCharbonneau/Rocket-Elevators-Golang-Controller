@@ -1,10 +1,10 @@
 package main
 
 //Button on a floor or basement to go back to lobby
-type CallButton struct {
+// type CallButton struct {
 
-}
+// }
 
-func NewCallButton(_floor int, _direction string) *CallButton {
+// func NewCallButton(_floor int, _direction string) *CallButton {
 
-}
+// }
