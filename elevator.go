@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"time"
 )
 
@@ -22,9 +23,48 @@ func NewElevator(_elevatorID int, _status string, _amountOfFloors int, _currentF
 	return &elevator
 }
 
-// func (e *Elevator) move() {
+func (e *Elevator) move() {
+	for len(e.floorRequestList) > 0 {
+		fmt.Println("========Elevator is moving==========")
+		e.status = "moving"
+		time.Sleep(2 * time.Second)
 
-// }
+		e.sortFloorList()
+		destination := e.floorRequestList[0]
+		if e.direction == "up" {
+			for e.currentFloor < destination {
+				e.currentFloor++
+			}
+
+		} else if e.direction == "down" {
+			for e.currentFloor > destination {
+				e.currentFloor--
+			}
+		}
+		e.status = "stopped"
+		fmt.Println("===== Elevator stopped=======")
+		e.operateDoors()
+
+		fmt.Println("request: ", e.floorRequestList)
+		fmt.Println("current floor:", e.currentFloor)
+		e.floorRequestList = e.floorRequestList[1:]
+		e.completedRequestsList = append(e.completedRequestsList, destination)
+
+	}
+	e.status = "idle"
+	e.direction = "empty"
+	fmt.Println("========Elevator stopped==========")
+
+}
+
+func (e *Elevator) sortFloorList() {
+	if e.direction == "up" {
+		sort.Ints(e.floorRequestList)
+
+	} else {
+		sort.Sort(sort.Reverse(sort.IntSlice(e.floorRequestList)))
+	}
+}
 
 func (e *Elevator) operateDoors() {
 	e.door.status = "opened"
@@ -40,6 +80,7 @@ func (e *Elevator) operateDoors() {
 
 func (e *Elevator) addNewRequest(requestedFloor int) {
 	if contains(e.floorRequestList, requestedFloor) {
+
 	} else {
 		e.floorRequestList = append(e.floorRequestList, requestedFloor)
 

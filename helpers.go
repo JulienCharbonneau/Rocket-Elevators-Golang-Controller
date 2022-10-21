@@ -23,3 +23,5 @@ var arr = [...]string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"
 func toCharStrArr(i int) string {
 	return arr[i-1]
 }
+
+// remove element in a slice

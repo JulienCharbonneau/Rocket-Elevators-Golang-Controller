@@ -9,15 +9,11 @@ func main() {
 	fmt.Println("elevator door", newElevator.door.status)
 	newElevator.door.status = "opend"
 	fmt.Println("elevator door", newElevator.door.status)
-	newElevator.floorRequestList = append(newElevator.floorRequestList, 1, 2, 3)
-	fmt.Println("request list:", newElevator.floorRequestList)
 
 	newElevator.addNewRequest(5)
+	newElevator.addNewRequest(1)
 
-	newElevator.operateDoors()
-	fmt.Println("request list:", newElevator.floorRequestList)
-
-	fmt.Println("elevator direction :", newElevator.direction)
+	newElevator.move()
 
 	// var newCallButton = NewCallButton(2, "up")
 	// fmt.Println("call button: ", newCallButton.direction)
