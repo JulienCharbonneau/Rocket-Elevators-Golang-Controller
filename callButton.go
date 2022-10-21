@@ -8,7 +8,7 @@ type CallButton struct {
 	direction string
 }
 
-func NewCallButton(_floor int, _direction string) CallButton {
-	callButton := CallButton{Id: 1, status: "off", floor: _floor, direction: _direction}
+func NewCallButton(_id int, _status string, _floor int, _direction string) CallButton {
+	callButton := CallButton{Id: _id, status: "on", floor: _floor, direction: _direction}
 	return callButton
 }

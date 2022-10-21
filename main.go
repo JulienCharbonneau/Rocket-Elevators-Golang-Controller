@@ -4,16 +4,17 @@ import "fmt"
 
 func main() {
 
-	var newElevator = NewElevator(1, "idle", 5, 2)
-	fmt.Println("elevator", newElevator.ID)
-	fmt.Println("elevator door", newElevator.door.status)
-	newElevator.door.status = "opend"
-	fmt.Println("elevator door", newElevator.door.status)
+	floorServed := [5]int{1, 2, 3, 4, 5}
+	var newColumn = NewColumn(1, 2, floorServed[:], false)
+	newColumn.requestElevator(2, "up")
+	newColumn.requestElevator(10, "down")
 
-	newElevator.addNewRequest(5)
-	newElevator.addNewRequest(1)
-
-	newElevator.move()
+	fmt.Println("best elevator", newColumn.best_elevator_informations.bestElevator.ID)
+	// var newElevator = NewElevator(1, "idle", 5, 2)
+	// fmt.Println("elevator", newElevator.ID)
+	// newElevator.addNewRequest(5)
+	// newElevator.addNewRequest(1)
+	// newElevator.move()
 
 	// var newCallButton = NewCallButton(2, "up")
 	// fmt.Println("call button: ", newCallButton.direction)

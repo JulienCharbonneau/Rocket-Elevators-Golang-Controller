@@ -43,10 +43,10 @@ func (e *Elevator) move() {
 		}
 		e.status = "stopped"
 		fmt.Println("===== Elevator stopped=======")
-		e.operateDoors()
-
 		fmt.Println("request: ", e.floorRequestList)
 		fmt.Println("current floor:", e.currentFloor)
+		e.operateDoors()
+
 		e.floorRequestList = e.floorRequestList[1:]
 		e.completedRequestsList = append(e.completedRequestsList, destination)
 
