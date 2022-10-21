@@ -2,12 +2,13 @@ package main
 
 //Button on a floor or basement to go back to lobby
 type CallButton struct {
-	Id int
-	status string
-	floor int
+	Id        int
+	status    string
+	floor     int
 	direction string
 }
 
-// func NewCallButton(_floor int, _direction string) *CallButton {
-
-// }
+func NewCallButton(_floor int, _direction string) CallButton {
+	callButton := CallButton{Id: 1, status: "off", floor: _floor, direction: _direction}
+	return callButton
+}
