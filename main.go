@@ -13,6 +13,8 @@ func main() {
 	fmt.Println("request list:", newElevator.floorRequestList)
 
 	newElevator.addNewRequest(5)
+
+	newElevator.operateDoors()
 	fmt.Println("request list:", newElevator.floorRequestList)
 
 	fmt.Println("elevator direction :", newElevator.direction)
