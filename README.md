@@ -1,26 +1,22 @@
 # Rocket-Elevators-Golang-Controller
-This is the template to use for the golang commercial controller. You will find the classes that should be used along with some methods described in the requirements. The necessary files to run some tests are also included. 
+This project is about implementing an elevator controller for commercial purposes.  The program is based on a pseudocode file given and for this version written in Golang. Golang ist a compiled language  designed by Google and because ist a compiled language it is faster than an interpreted language but handles less abstraction.Here a [video](https://drive.google.com/file/d/13dNLaarjPkoS8UFG3nO1uvWlKZEHt5lP/view?usp=sharing) that I explain my work
 
-### Installation
+### Usage 
+To run the script with golang run the command in the 
+`go run`
 
-With golang installed on your computer, all you need to do is initialize the module:
-
-`go mod init Rocket-Elevators-Commercial-Controller`
-
-The code to run the scenarios is included, and can be executed with:
-
-`go run . <SCENARIO-NUMBER>`
 
 ### Running the tests
 
-To launch the tests:
+To launch the tests, make sure to be at the root of the repository and run:
 
 `go test`
 
-With a fully completed project, you should get an output like:
+![](https://github.com/JulienCharbonneau/Rocket-Elevators-Golang-Controller/blob/main/goTest.gif)
 
-![Screenshot from 2021-06-15 15-25-10](https://user-images.githubusercontent.com/28630658/122111573-e6ea7380-cded-11eb-95e3-95e0096a1b3a.png)
 
-The test and scenarios files can be left in your final project. The grader will run tests similar to the ones provided.
+## Description
+This program creates a number of columns and elevators as needed and supports the needs of elevator request button and floor access request button with a system-based efficiency management point allowing to evaluate the best choice taking into account the floor where the request was initiated versus the availability and the direction of the cage. For commercial buildings, the first column is assigned at the basement and others are split between floors to serve.
 
-Of course, make sure to edit this Readme file to describe your own project!
+
+
