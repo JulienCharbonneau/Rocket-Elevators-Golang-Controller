@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 type Column struct {
 	ID                         int
 	status                     string
@@ -9,15 +7,14 @@ type Column struct {
 	amountOfElevators          int
 	callButtonsList            []CallButton
 	servedFloorsList           []int
-	elevatorList               []Elevator
+	elevatorsList              []*Elevator
 	isBasement                 bool
 	best_elevator_informations BestElevatorInformations
 }
 
-func NewColumn(_id, _amountOfElevators int, _servedFloors []int, _isBasement bool) *Column {
-	column := Column{ID: _id, amountOfElevators: _amountOfElevators, servedFloorsList: _servedFloors, isBasement: _isBasement}
-	column.amountOfFloors = len(_servedFloors)
-	column.best_elevator_informations = best_elevator_Info()
+func NewColumn(_id int, _status string, _amountOfFloors int, _amountOfElevators int, _servedFloors []int, _isBasement bool) *Column {
+	column := Column{ID: _id, status: _status, amountOfFloors: _amountOfFloors, amountOfElevators: _amountOfElevators, servedFloorsList: _servedFloors, isBasement: _isBasement}
+	column.best_elevator_informations = *best_elevator_Info()
 	column.createCallButtons(column.amountOfFloors, column.isBasement)
 	column.createElevators(column.amountOfFloors, column.amountOfElevators)
 	return &column
@@ -29,7 +26,7 @@ func (column *Column) createCallButtons(amountOfFloors int, isBasement bool) {
 		callButtonID := 1
 		for i := 0; i < column.amountOfFloors; i++ {
 			callButton := NewCallButton(callButtonID, "off", buttonFloor, "up")
-			column.callButtonsList = append(column.callButtonsList, callButton)
+			column.callButtonsList = append(column.callButtonsList, *callButton)
 			buttonFloor--
 			callButtonID++
 		}
@@ -38,7 +35,7 @@ func (column *Column) createCallButtons(amountOfFloors int, isBasement bool) {
 		callButtonID := 1
 		for i := 0; i < column.amountOfFloors; i++ {
 			callButton := NewCallButton(callButtonID, "off", buttonFloor, "down")
-			column.callButtonsList = append(column.callButtonsList, callButton)
+			column.callButtonsList = append(column.callButtonsList, *callButton)
 			buttonFloor++
 			callButtonID++
 		}
@@ -48,9 +45,10 @@ func (column *Column) createCallButtons(amountOfFloors int, isBasement bool) {
 
 func (column *Column) createElevators(_amountOfFloors int, _amountOfElevators int) {
 	elevatorID := 1
-	for i := 0; i < column.amountOfElevators; i++ {
-		elevator := NewElevator(elevatorID, "idle", _amountOfElevators, 1)
-		column.elevatorList = append(column.elevatorList, *elevator)
+	for i := 0; i < _amountOfElevators; i++ {
+		elevator := NewElevator(elevatorID, "idle", _amountOfFloors, 1)
+		column.elevatorsList = append(column.elevatorsList, elevator)
+		elevatorID++
 	}
 
 }
@@ -62,48 +60,47 @@ func (c *Column) requestElevator(_requestedFloor int, _direction string) *Elevat
 	elevator.move()
 	elevator.addNewRequest(1)
 	elevator.move()
-	return &elevator
+	return elevator
 }
 
-func (column *Column) findElevator(requestedFloor int, requestedDirection string) Elevator {
+func (column *Column) findElevator(requestedFloor int, requestedDirection string) *Elevator {
 	if requestedFloor == 1 {
-		for _, elevator := range column.elevatorList {
+		for _, elevator := range column.elevatorsList {
 			if elevator.currentFloor == 1 && elevator.status == "stopped" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(1, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(1, elevator, column.best_elevator_informations, requestedFloor)
 			} else if elevator.currentFloor == 1 && elevator.status == "idle" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(2, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(2, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else if elevator.currentFloor < 1 && elevator.direction == "up" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(3, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(3, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else if elevator.currentFloor > 1 && elevator.direction == "down" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(3, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(3, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else if elevator.status == "idle" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(4, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(4, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(5, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(5, elevator, column.best_elevator_informations, requestedFloor)
 
 			}
-			fmt.Println(elevator)
 		}
 	} else {
-		for _, elevator := range column.elevatorList {
+		for _, elevator := range column.elevatorsList {
 			if requestedFloor == elevator.currentFloor && elevator.status == "stopped" && requestedDirection == elevator.direction {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(1, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(1, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else if requestedFloor > elevator.currentFloor && elevator.direction == "up" && requestedDirection == "up" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(2, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(2, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else if requestedFloor < elevator.currentFloor && elevator.direction == "down" && requestedDirection == "down" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(2, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(2, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else if elevator.status == "idle" {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(4, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(4, elevator, column.best_elevator_informations, requestedFloor)
 
 			} else {
-				column.best_elevator_informations = *column.checkIfElevatorIsBetter(1, elevator, column.best_elevator_informations, requestedFloor)
+				column.best_elevator_informations = column.checkIfElevatorIsBetter(5, elevator, column.best_elevator_informations, requestedFloor)
 
 			}
 		}
@@ -111,7 +108,7 @@ func (column *Column) findElevator(requestedFloor int, requestedDirection string
 	return column.best_elevator_informations.bestElevator
 }
 
-func (column *Column) checkIfElevatorIsBetter(scoreToCheck int, new_Elevator Elevator, info BestElevatorInformations, floor int) *BestElevatorInformations {
+func (column *Column) checkIfElevatorIsBetter(scoreToCheck int, new_Elevator *Elevator, info BestElevatorInformations, floor int) BestElevatorInformations {
 	if scoreToCheck < info.bestScore {
 		info.bestScore = scoreToCheck
 		info.bestElevator = new_Elevator
@@ -123,16 +120,16 @@ func (column *Column) checkIfElevatorIsBetter(scoreToCheck int, new_Elevator Ele
 			info.referenceGap = gap
 		}
 	}
-	return &info
+	return info
 }
 
 type BestElevatorInformations struct {
 	bestScore    int
 	referenceGap int
-	bestElevator Elevator
+	bestElevator *Elevator
 }
 
-func best_elevator_Info() BestElevatorInformations {
-	info := BestElevatorInformations{referenceGap: 10000000}
-	return info
+func best_elevator_Info() *BestElevatorInformations {
+	info := BestElevatorInformations{bestScore: 6, referenceGap: 10000000}
+	return &info
 }

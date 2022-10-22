@@ -13,7 +13,7 @@ type Elevator struct {
 	currentFloor          int
 	door                  Door
 	completedRequestsList []int
-	floorRequestList      []int
+	floorRequestsList     []int
 	direction             string
 }
 
@@ -24,13 +24,13 @@ func NewElevator(_elevatorID int, _status string, _amountOfFloors int, _currentF
 }
 
 func (e *Elevator) move() {
-	for len(e.floorRequestList) > 0 {
+	for len(e.floorRequestsList) > 0 {
 		fmt.Println("========Elevator is moving==========")
 		e.status = "moving"
 		time.Sleep(2 * time.Second)
 
 		e.sortFloorList()
-		destination := e.floorRequestList[0]
+		destination := e.floorRequestsList[0]
 		if e.direction == "up" {
 			for e.currentFloor < destination {
 				e.currentFloor++
@@ -43,11 +43,11 @@ func (e *Elevator) move() {
 		}
 		e.status = "stopped"
 		fmt.Println("===== Elevator stopped=======")
-		fmt.Println("request: ", e.floorRequestList)
+		fmt.Println("request: ", e.floorRequestsList)
 		fmt.Println("current floor:", e.currentFloor)
 		e.operateDoors()
 
-		e.floorRequestList = e.floorRequestList[1:]
+		e.floorRequestsList = e.floorRequestsList[1:]
 		e.completedRequestsList = append(e.completedRequestsList, destination)
 
 	}
@@ -59,10 +59,10 @@ func (e *Elevator) move() {
 
 func (e *Elevator) sortFloorList() {
 	if e.direction == "up" {
-		sort.Ints(e.floorRequestList)
+		sort.Ints(e.floorRequestsList)
 
 	} else {
-		sort.Sort(sort.Reverse(sort.IntSlice(e.floorRequestList)))
+		sort.Sort(sort.Reverse(sort.IntSlice(e.floorRequestsList)))
 	}
 }
 
@@ -79,10 +79,10 @@ func (e *Elevator) operateDoors() {
 }
 
 func (e *Elevator) addNewRequest(requestedFloor int) {
-	if contains(e.floorRequestList, requestedFloor) {
+	if contains(e.floorRequestsList, requestedFloor) {
 
 	} else {
-		e.floorRequestList = append(e.floorRequestList, requestedFloor)
+		e.floorRequestsList = append(e.floorRequestsList, requestedFloor)
 
 	}
 	if e.currentFloor < requestedFloor {

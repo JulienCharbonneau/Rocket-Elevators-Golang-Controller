@@ -8,9 +8,9 @@ type FloorRequestButton struct {
 	direction string
 }
 
-func NewFloorRequestButton(_floor int, _direction string) FloorRequestButton {
+func NewFloorRequestButton(_id int, _status string, _floor int, _direction string) FloorRequestButton {
 
-	buttton := FloorRequestButton{ID: 1, status: "online", floor: _floor, direction: _direction}
+	buttton := FloorRequestButton{ID: _id, status: _status, floor: _floor, direction: _direction}
 
 	return buttton
 }
